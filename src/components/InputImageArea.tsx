@@ -135,7 +135,12 @@ export const InputImageArea = ({ className }: InputImageAreaProps) => {
           type="file"
           accept="image/*"
           multiple
-          onChange={() => inputFileEl.current?.files && handleInputFiles(inputFileEl.current.files)}
+          onChange={() => {
+            const files = inputFileEl.current?.files;
+            if (!files) return;
+
+            handleInputFiles(Array.from(files).map((file) => ({ file, path: file.name })));
+          }}
           className="hidden"
           ref={inputFileEl}
         />
