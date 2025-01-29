@@ -27,10 +27,11 @@ export const ConvertImageFileTypeSelector = ({ className }: ConvertImageFileType
         'cursor-pointer block w-full p-2 bg-slate-700 border border-gray-600 text-white rounded',
         className,
       )}
+      value={convertFileType}
       onChange={handleChange}
     >
       {LIST.map((item) => (
-        <option key={item.value} value={item.value} selected={item.value === convertFileType}>
+        <option key={item.value} value={item.value}>
           {item.label}
         </option>
       ))}
