@@ -3,6 +3,11 @@ import { useCallback, useRef } from 'react';
 import { type ConvertImage, type ConvertImageFileType, useConvertFileType, useImages } from '../hooks';
 import { cx } from '../utils';
 
+type InputFileInfo = {
+  file: File;
+  path: string;
+};
+
 export interface InputImageAreaProps {
   className?: string;
 }
@@ -12,23 +17,23 @@ export const InputImageArea = ({ className }: InputImageAreaProps) => {
   const { convertFileType } = useConvertFileType();
 
   const handleInputFiles = useCallback(
-    async (files: FileList) => {
+    async (files: InputFileInfo[]) => {
       const workingPromises: Promise<void>[] = [];
 
       const tasks = Array.from(files)
-        .sort((a, b) => a.name.localeCompare(b.name))
-        .map((file) => {
+        .sort((a, b) => a.path.localeCompare(b.path))
+        .map((fileInfo) => {
           const convertImage: ConvertImage = {
             id: generateId(),
             status: 'converting',
-            filename: file.name,
-            outputFilename: generateOutputFilename(file.name, convertFileType),
+            filename: fileInfo.path,
+            outputFilename: generateOutputFilename(fileInfo.path, convertFileType),
           };
           addImage(convertImage);
 
           return {
             convertImage,
-            file,
+            fileInfo,
           };
         });
 
@@ -39,8 +44,8 @@ export const InputImageArea = ({ className }: InputImageAreaProps) => {
           workingPromises.length = 0;
         }
 
-        const { convertImage, file } = tasks[i];
-        const promise = compressImage(file, {
+        const { convertImage, fileInfo } = tasks[i];
+        const promise = compressImage(fileInfo.file, {
           fileType: convertFileType === 'auto' ? undefined : convertFileType,
         })
           .then((file: File) => {
@@ -86,7 +91,7 @@ export const InputImageArea = ({ className }: InputImageAreaProps) => {
   }, []);
 
   const handleDrop = useCallback(
-    (e: React.DragEvent) => {
+    async (e: React.DragEvent) => {
       e.preventDefault();
 
       if (dragEl.current) {
@@ -94,7 +99,16 @@ export const InputImageArea = ({ className }: InputImageAreaProps) => {
         dragEl.current.classList.add('bg-slate-900');
       }
       if (e.dataTransfer.files.length === 0) return;
-      handleInputFiles(e.dataTransfer.files);
+
+      const files: InputFileInfo[] = [];
+      const entries = Array.from(e.dataTransfer.items).map((item) => item.webkitGetAsEntry());
+      for (const entry of entries) {
+        if (!entry) continue;
+        files.push(...(await traverseEntry(entry, '')));
+      }
+
+      if (files.length === 0) return;
+      handleInputFiles(files);
     },
     [handleInputFiles],
   );
@@ -130,6 +144,28 @@ export const InputImageArea = ({ className }: InputImageAreaProps) => {
     </>
   );
 };
+
+async function traverseEntry(entry: FileSystemEntry, path: string): Promise<InputFileInfo[]> {
+  return new Promise((resolve, reject) => {
+    if (entry.isDirectory) {
+      const dirReader = (entry as FileSystemDirectoryEntry).createReader();
+      dirReader.readEntries(async (entries) => {
+        const files: InputFileInfo[] = [];
+        for (const childEntry of entries) {
+          files.push(...(await traverseEntry(childEntry, `${path}${entry.name}/`)));
+        }
+        resolve(files);
+      }, reject);
+    } else if (entry.isFile) {
+      const file = entry as FileSystemFileEntry;
+      file.file((file) => {
+        resolve([{ file, path: `${path}${file.name}` }]);
+      });
+    } else {
+      resolve([]);
+    }
+  });
+}
 
 function generateId() {
   return `${Date.now()}.${Math.floor(Math.random() * 1000)}`;
