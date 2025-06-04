@@ -26,10 +26,12 @@ export const ResultBar = ({ className }: ResultBarProps) => {
       }
     }
     const blob = await zip.generateAsync({ type: 'blob' });
+    const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
+    a.href = url;
     a.download = 'images.zip';
     a.click();
+    URL.revokeObjectURL(url);
   }, [images]);
 
   return (
