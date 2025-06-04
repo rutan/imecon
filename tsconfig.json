@@ -13,7 +13,8 @@
     "strict": true,
     "jsx": "react-jsx",
     "noImplicitReturns": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "types": ["vitest/globals"]
   },
   "include": ["src/**/*"]
 }

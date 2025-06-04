@@ -18,3 +18,10 @@ pnpm dev
 ```bash
 pnpm build
 ```
+
+## Testing
+
+```bash
+pnpm test
+```
+

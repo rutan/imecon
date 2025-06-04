@@ -22,6 +22,7 @@ export const ConvertImageFileTypeSelector = ({ className }: ConvertImageFileType
 
   return (
     <select
+      data-testid="convert-file-type-selector"
       className={cx(
         'ConvertImageFileTypeSelector',
         'cursor-pointer block w-full p-2 bg-slate-700 border border-gray-600 text-white rounded',
