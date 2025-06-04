@@ -34,6 +34,7 @@ export const ResultBar = ({ className }: ResultBarProps) => {
 
   return (
     <div
+      data-testid="result-bar"
       className={cx(
         'ResultBar',
         'fixed bottom-0 left-0 w-full p-4 bg-slate-700 border-t border-gray-600 text-white',

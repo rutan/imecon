@@ -10,7 +10,7 @@ export const ImageList = ({ className }: ImageListProps) => {
 
   return (
     <div className={cx('ImageList', className)}>
-      <ul>
+      <ul data-testid="image-list">
         {images.map((image) => (
           <ImageItem key={image.id} image={image} />
         ))}

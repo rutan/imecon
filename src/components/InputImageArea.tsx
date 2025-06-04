@@ -120,6 +120,7 @@ export const InputImageArea = ({ className }: InputImageAreaProps) => {
     <>
       {/* biome-ignore lint/a11y/useKeyWithClickEvents: This is a drag and drop area */}
       <div
+        data-testid="input-image-area"
         className={cx(
           'InputImageArea',
           'w-full h-64 flex justify-center items-center cursor-pointer bg-slate-900 border-4 border-dotted border-slate-600 text-white rounded-2xl',
@@ -176,7 +177,7 @@ function generateId() {
   return `${Date.now()}.${Math.floor(Math.random() * 1000)}`;
 }
 
-function generateOutputFilename(filename: string, fileType: ConvertImageFileType) {
+export function generateOutputFilename(filename: string, fileType: ConvertImageFileType) {
   if (fileType === 'auto') return filename;
 
   const ext = fileType.split('/').pop();
