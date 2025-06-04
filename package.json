@@ -12,7 +12,7 @@
     "lint:tsc": "tsc --noEmit",
     "format": "biome check --write ./",
     "clean": "rimraf ./dist",
-    "test": "vitest"
+    "test": "vitest run"
   },
   "dependencies": {
     "browser-image-compression": "^2.0.2",
