@@ -23,10 +23,12 @@ const ImageItem = ({ image }: { image: ConvertImage }) => {
   const handleDownload = () => {
     if (image.status !== 'done') return;
 
+    const url = URL.createObjectURL(image.result);
     const a = document.createElement('a');
-    a.href = URL.createObjectURL(image.result);
+    a.href = url;
     a.download = image.outputFilename;
     a.click();
+    URL.revokeObjectURL(url);
   };
 
   return (
