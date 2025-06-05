@@ -58,11 +58,7 @@ const ImageItem = ({ image }: { image: ConvertImage }) => {
         >
           ダウンロード
         </button>
-        <button
-          type="button"
-          className="px-4 py-2 ml-4 text-white underline"
-          onClick={() => removeImage(image.id)}
-        >
+        <button type="button" className="px-4 py-2 ml-4 text-white underline" onClick={() => removeImage(image.id)}>
           削除
         </button>
       </div>
