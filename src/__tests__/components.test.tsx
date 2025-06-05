@@ -1,7 +1,9 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Provider } from 'jotai';
 import { describe, expect, it } from 'vitest';
 import { ConvertImageFileTypeSelector, ImageList, InputImageArea, ResultBar } from '../components';
+import { type ConvertImageDone, useImages } from '../hooks';
+import React, { useEffect } from 'react';
 
 const wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => <Provider>{children}</Provider>;
 
@@ -26,5 +28,34 @@ describe('components render', () => {
   it('ResultBar renders', () => {
     render(<ResultBar />, { wrapper });
     expect(screen.getByTestId('result-bar')).toBeInTheDocument();
+  });
+
+  it('remove button deletes item from list', async () => {
+    const image: ConvertImageDone = {
+      id: '1',
+      status: 'done',
+      filename: 'foo.png',
+      outputFilename: 'foo.png',
+      result: new File(['data'], 'foo.png', { type: 'image/png' }),
+    };
+
+    const Setup: React.FC = () => {
+      const { addImage } = useImages();
+      const called = React.useRef(false);
+      if (!called.current) {
+        addImage(image);
+        called.current = true;
+      }
+      return <ImageList />;
+    };
+
+    render(<Setup />, { wrapper });
+
+    expect(await screen.findByText('foo.png')).toBeInTheDocument();
+    const removeButton = screen.getByRole('button', { name: '削除' });
+    fireEvent.click(removeButton);
+    await waitFor(() => {
+      expect(screen.queryByText('foo.png')).not.toBeInTheDocument();
+    });
   });
 });

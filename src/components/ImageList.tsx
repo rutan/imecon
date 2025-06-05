@@ -20,6 +20,7 @@ export const ImageList = ({ className }: ImageListProps) => {
 };
 
 const ImageItem = ({ image }: { image: ConvertImage }) => {
+  const { removeImage } = useImages();
   const handleDownload = () => {
     if (image.status !== 'done') return;
 
@@ -56,6 +57,13 @@ const ImageItem = ({ image }: { image: ConvertImage }) => {
           onClick={handleDownload}
         >
           ダウンロード
+        </button>
+        <button
+          type="button"
+          className="px-4 py-2 ml-4 text-white underline"
+          onClick={() => removeImage(image.id)}
+        >
+          削除
         </button>
       </div>
     </li>
