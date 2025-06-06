@@ -1,3 +1,4 @@
+import { useEffect, useMemo } from 'react';
 import { type ConvertImage, useImages } from '../hooks';
 import { cx, formatFileSize } from '../utils';
 
@@ -32,6 +33,17 @@ const ImageItem = ({ image }: { image: ConvertImage }) => {
     URL.revokeObjectURL(url);
   };
 
+  const thumbnailUrl = useMemo(() => {
+    if (image.status !== 'done') return '';
+    return URL.createObjectURL(image.result);
+  }, [image]);
+
+  useEffect(() => {
+    return () => {
+      if (thumbnailUrl) URL.revokeObjectURL(thumbnailUrl);
+    };
+  }, [thumbnailUrl]);
+
   return (
     <li className="flex justify-between items-start p-2 bg-slate-700 border border-gray-600 text-white">
       <span
@@ -46,6 +58,11 @@ const ImageItem = ({ image }: { image: ConvertImage }) => {
         {image.status === 'done' && '完了'}
         {image.status === 'error' && 'エラー'}
       </span>
+      {image.status === 'done' ? (
+        <img src={thumbnailUrl} alt={image.filename} className="w-16 h-16 object-contain mr-4 rounded" />
+      ) : (
+        <div className="w-16 h-16 mr-4" />
+      )}
       <div className="flex-1">
         <span>{image.filename}</span>
         <span className="block text-xs mt-1">
