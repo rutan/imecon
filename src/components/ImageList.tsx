@@ -33,26 +33,24 @@ const ImageItem = ({ image }: { image: ConvertImage }) => {
   };
 
   return (
-    <li className="flex justify-between items-center p-2 bg-slate-700 border border-gray-600 text-white">
-      <div>
-        <span
-          className={cx(
-            'text-white px-2 py-1 rounded mr-4 text-sm',
-            image.status === 'converting' && 'bg-yellow-600',
-            image.status === 'done' && 'bg-slate-500',
-            image.status === 'error' && 'bg-red-600',
-          )}
-        >
-          {image.status === 'converting' && '変換中...'}
-          {image.status === 'done' && '完了'}
-          {image.status === 'error' && 'エラー'}
-        </span>
-        <span className="w-4/6">
-          {image.filename}
-          <span className="block text-xs mt-1">
-            {formatFileSize(image.originalSize)}
-            {image.status === 'done' && ` → ${formatFileSize(image.compressedSize)}`}
-          </span>
+    <li className="flex justify-between items-start p-2 bg-slate-700 border border-gray-600 text-white">
+      <span
+        className={cx(
+          'text-white px-2 py-1 rounded mr-4 text-sm shrink-0',
+          image.status === 'converting' && 'bg-yellow-600',
+          image.status === 'done' && 'bg-slate-500',
+          image.status === 'error' && 'bg-red-600',
+        )}
+      >
+        {image.status === 'converting' && '変換中...'}
+        {image.status === 'done' && '完了'}
+        {image.status === 'error' && 'エラー'}
+      </span>
+      <div className="flex-1">
+        <span>{image.filename}</span>
+        <span className="block text-xs mt-1">
+          {formatFileSize(image.originalSize)}
+          {image.status === 'done' && ` → ${formatFileSize(image.compressedSize)}`}
         </span>
       </div>
       <div>
