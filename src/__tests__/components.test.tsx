@@ -36,6 +36,8 @@ describe('components render', () => {
       status: 'done',
       filename: 'foo.png',
       outputFilename: 'foo.png',
+      originalSize: 8,
+      compressedSize: 4,
       result: new File(['data'], 'foo.png', { type: 'image/png' }),
     };
 

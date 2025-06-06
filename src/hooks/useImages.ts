@@ -6,6 +6,7 @@ interface ConvertImageBase {
   id: string;
   filename: string;
   outputFilename: string;
+  originalSize: number;
 }
 
 export interface ConvertImageConverting extends ConvertImageBase {
@@ -15,6 +16,7 @@ export interface ConvertImageConverting extends ConvertImageBase {
 export interface ConvertImageDone extends ConvertImageBase {
   status: 'done';
   result: File;
+  compressedSize: number;
 }
 
 export interface ConvertImageError extends ConvertImageBase {
