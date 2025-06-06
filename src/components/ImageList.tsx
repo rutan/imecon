@@ -1,6 +1,7 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { type ConvertImage, useImages } from '../hooks';
 import { cx, formatFileSize } from '../utils';
+import { ImageModal } from './ImageModal';
 
 function fileTypeLabel(type: string) {
   switch (type) {
@@ -35,6 +36,7 @@ export const ImageList = ({ className }: ImageListProps) => {
 
 const ImageItem = ({ image }: { image: ConvertImage }) => {
   const { removeImage } = useImages();
+  const [open, setOpen] = useState(false);
   const handleDownload = () => {
     if (image.status !== 'done') return;
 
@@ -72,7 +74,19 @@ const ImageItem = ({ image }: { image: ConvertImage }) => {
         {image.status === 'error' && 'エラー'}
       </span>
       {image.status === 'done' ? (
-        <img src={thumbnailUrl} alt={image.filename} className="w-16 h-16 object-contain mr-4 rounded bg-white" />
+        <>
+          <button
+            type="button"
+            className="w-16 h-16 mr-4 rounded bg-white cursor-pointer p-0"
+            onClick={() => setOpen(true)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') setOpen(true);
+            }}
+          >
+            <img src={thumbnailUrl} alt={image.filename} className="w-full h-full object-contain" />
+          </button>
+          <ImageModal open={open} src={thumbnailUrl} alt={image.filename} onClose={() => setOpen(false)} />
+        </>
       ) : (
         <div className="w-16 h-16 mr-4" />
       )}
