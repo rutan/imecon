@@ -59,11 +59,16 @@ export const useImages = () => {
     [setImages],
   );
 
+  const removeDoneImages = useCallback(() => {
+    setImages((images) => images.filter((i) => i.status !== 'done'));
+  }, [setImages]);
+
   return {
     images,
     setImages,
     addImage,
     updateImage,
     removeImage,
+    removeDoneImages,
   };
 };
