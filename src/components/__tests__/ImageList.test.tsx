@@ -22,6 +22,7 @@ describe('ImageList', () => {
       originalSize: 8,
       compressedSize: 4,
       result: new File(['data'], 'foo.png', { type: 'image/png' }),
+      convertedFileType: 'image/png',
     };
 
     const Setup: React.FC = () => {
@@ -53,6 +54,7 @@ describe('ImageList', () => {
       originalSize: 8,
       compressedSize: 4,
       result: new File(['data'], 'foo.png', { type: 'image/png' }),
+      convertedFileType: 'image/png',
     };
 
     const Setup: React.FC = () => {
@@ -67,5 +69,30 @@ describe('ImageList', () => {
     const img = await screen.findByAltText('foo.png');
     expect(img).toBeInTheDocument();
     expect(img).toHaveClass('bg-white');
+  });
+
+  it('displays converted file type', async () => {
+    const image: ConvertImageDone = {
+      id: '1',
+      status: 'done',
+      filename: 'foo.png',
+      outputFilename: 'foo.png',
+      originalSize: 8,
+      compressedSize: 4,
+      result: new File(['data'], 'foo.png', { type: 'image/png' }),
+      convertedFileType: 'image/png',
+    };
+
+    const Setup: React.FC = () => {
+      const { addImage } = useImages();
+      useEffect(() => {
+        addImage(image);
+      }, [addImage]);
+      return <ImageList />;
+    };
+
+    render(<Setup />, { wrapper });
+    const label = await screen.findByTestId('converted-file-type');
+    expect(label).toHaveTextContent('PNG');
   });
 });

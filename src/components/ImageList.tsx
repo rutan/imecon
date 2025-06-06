@@ -2,6 +2,19 @@ import { useEffect, useMemo } from 'react';
 import { type ConvertImage, useImages } from '../hooks';
 import { cx, formatFileSize } from '../utils';
 
+function fileTypeLabel(type: string) {
+  switch (type) {
+    case 'image/jpeg':
+      return 'JPEG';
+    case 'image/png':
+      return 'PNG';
+    case 'image/webp':
+      return 'WebP';
+    default:
+      return type;
+  }
+}
+
 export interface ImageListProps {
   className?: string;
 }
@@ -69,6 +82,11 @@ const ImageItem = ({ image }: { image: ConvertImage }) => {
           {formatFileSize(image.originalSize)}
           {image.status === 'done' && ` → ${formatFileSize(image.compressedSize)}`}
         </span>
+        {image.status === 'done' && (
+          <span className="block text-xs mt-1" data-testid="converted-file-type">
+            形式: {fileTypeLabel(image.convertedFileType)}
+          </span>
+        )}
       </div>
       <div>
         <button

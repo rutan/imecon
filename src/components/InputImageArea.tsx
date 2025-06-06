@@ -55,6 +55,7 @@ export const InputImageArea = ({ className }: InputImageAreaProps) => {
               status: 'done',
               result: file,
               compressedSize: file.size,
+              convertedFileType: file.type,
             });
           })
           .catch((error) => {
