@@ -28,6 +28,7 @@ export const InputImageArea = ({ className }: InputImageAreaProps) => {
             status: 'converting',
             filename: fileInfo.path,
             outputFilename: generateOutputFilename(fileInfo.path, convertFileType),
+            originalSize: fileInfo.file.size,
           };
           addImage(convertImage);
 
@@ -53,6 +54,7 @@ export const InputImageArea = ({ className }: InputImageAreaProps) => {
               ...convertImage,
               status: 'done',
               result: file,
+              compressedSize: file.size,
             });
           })
           .catch((error) => {

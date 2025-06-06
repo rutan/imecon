@@ -1,5 +1,5 @@
 import { type ConvertImage, useImages } from '../hooks';
-import { cx } from '../utils';
+import { cx, formatFileSize } from '../utils';
 
 export interface ImageListProps {
   className?: string;
@@ -47,7 +47,13 @@ const ImageItem = ({ image }: { image: ConvertImage }) => {
           {image.status === 'done' && '完了'}
           {image.status === 'error' && 'エラー'}
         </span>
-        <span className="w-4/6">{image.filename}</span>
+        <span className="w-4/6">
+          {image.filename}
+          <span className="block text-xs mt-1">
+            {formatFileSize(image.originalSize)}
+            {image.status === 'done' && ` → ${formatFileSize(image.compressedSize)}`}
+          </span>
+        </span>
       </div>
       <div>
         <button
