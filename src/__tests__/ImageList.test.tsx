@@ -1,13 +1,11 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'jotai';
 import React, { useEffect } from 'react';
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { ImageList } from '../components';
 import { type ConvertImageDone, useImages } from '../hooks';
 
-const wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <Provider>{children}</Provider>
-);
+const wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => <Provider>{children}</Provider>;
 
 describe('ImageList', () => {
   it('renders empty list initially', () => {
