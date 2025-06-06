@@ -8,7 +8,7 @@ export interface ResultBarProps {
 }
 
 export const ResultBar = ({ className }: ResultBarProps) => {
-  const { images } = useImages();
+  const { images, removeProcessedImages } = useImages();
 
   const convertedCount = useMemo(() => {
     return images.filter((image) => image.status === 'done').length;
@@ -34,6 +34,14 @@ export const ResultBar = ({ className }: ResultBarProps) => {
     URL.revokeObjectURL(url);
   }, [images]);
 
+  const clearableCount = useMemo(() => {
+    return images.filter((image) => image.status === 'done' || image.status === 'error').length;
+  }, [images]);
+
+  const handleClear = useCallback(() => {
+    removeProcessedImages();
+  }, [removeProcessedImages]);
+
   return (
     <div
       data-testid="result-bar"
@@ -55,6 +63,14 @@ export const ResultBar = ({ className }: ResultBarProps) => {
             disabled={convertedCount === 0 || convertedCount !== imagesWithoutErrorCount}
           >
             ZIPでダウンロード
+          </button>
+          <button
+            type="button"
+            className="px-4 py-2 ml-4 bg-red-500 text-white rounded disabled:cursor-not-allowed disabled:opacity-30 disabled:bg-gray-400"
+            onClick={handleClear}
+            disabled={clearableCount === 0}
+          >
+            すべて削除
           </button>
         </div>
       </div>
