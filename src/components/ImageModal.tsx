@@ -25,19 +25,19 @@ export const ImageModal = ({ open, src, alt, onClose }: ImageModalProps) => {
     <button
       type="button"
       data-testid="image-modal"
-      className="ImageModal fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80"
+      className="ImageModal fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 overflow-auto"
       onClick={onClose}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') onClose();
       }}
     >
-      <div
+      <img
+        src={src}
+        alt={alt}
         onClick={(e) => e.stopPropagation()}
         onKeyDown={(e) => e.stopPropagation()}
-        className="max-h-[90vh] max-w-[90vw]"
-      >
-        <img src={src} alt={alt} className="object-contain max-h-full max-w-full" />
-      </div>
+        className="object-contain max-h-[90vh] max-w-[90vw]"
+      />
     </button>
   );
 };
