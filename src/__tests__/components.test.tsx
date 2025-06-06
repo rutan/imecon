@@ -60,4 +60,29 @@ describe('components render', () => {
       expect(screen.queryByText('foo.png')).not.toBeInTheDocument();
     });
   });
+
+  it('shows thumbnail when conversion is done', async () => {
+    const image: ConvertImageDone = {
+      id: '1',
+      status: 'done',
+      filename: 'foo.png',
+      outputFilename: 'foo.png',
+      originalSize: 8,
+      compressedSize: 4,
+      result: new File(['data'], 'foo.png', { type: 'image/png' }),
+    };
+
+    const Setup: React.FC = () => {
+      const { addImage } = useImages();
+      useEffect(() => {
+        addImage(image);
+      }, [addImage]);
+      return <ImageList />;
+    };
+
+    render(<Setup />, { wrapper });
+    const img = await screen.findByAltText('foo.png');
+    expect(img).toBeInTheDocument();
+    expect(img).toHaveClass('bg-white');
+  });
 });

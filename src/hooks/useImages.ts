@@ -1,4 +1,5 @@
 import { atom, useAtom } from 'jotai';
+import { useCallback } from 'react';
 
 export type ConvertImage = ConvertImageConverting | ConvertImageDone | ConvertImageError;
 
@@ -29,24 +30,33 @@ const imagesAtom = atom<ConvertImage[]>([]);
 export const useImages = () => {
   const [images, setImages] = useAtom(imagesAtom);
 
-  const addImage = (image: ConvertImage) => {
-    setImages((images) => {
-      if (images.some((i) => i.id === image.id)) {
-        return images.map((i) => (i.id === image.id ? image : i));
-      }
-      return [...images, image];
-    });
-  };
+  const addImage = useCallback(
+    (image: ConvertImage) => {
+      setImages((images) => {
+        if (images.some((i) => i.id === image.id)) {
+          return images.map((i) => (i.id === image.id ? image : i));
+        }
+        return [...images, image];
+      });
+    },
+    [setImages],
+  );
 
-  const updateImage = (id: string, image: ConvertImage) => {
-    setImages((images) => {
-      return images.map((i) => (i.id === id ? image : i));
-    });
-  };
+  const updateImage = useCallback(
+    (id: string, image: ConvertImage) => {
+      setImages((images) => {
+        return images.map((i) => (i.id === id ? image : i));
+      });
+    },
+    [setImages],
+  );
 
-  const removeImage = (id: string) => {
-    setImages((images) => images.filter((i) => i.id !== id));
-  };
+  const removeImage = useCallback(
+    (id: string) => {
+      setImages((images) => images.filter((i) => i.id !== id));
+    },
+    [setImages],
+  );
 
   return {
     images,
