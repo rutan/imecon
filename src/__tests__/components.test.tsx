@@ -81,6 +81,8 @@ describe('components render', () => {
     };
 
     render(<Setup />, { wrapper });
-    expect(await screen.findByAltText('foo.png')).toBeInTheDocument();
+    const img = await screen.findByAltText('foo.png');
+    expect(img).toBeInTheDocument();
+    expect(img).toHaveClass('bg-white');
   });
 });

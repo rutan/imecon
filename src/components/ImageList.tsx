@@ -59,7 +59,7 @@ const ImageItem = ({ image }: { image: ConvertImage }) => {
         {image.status === 'error' && 'エラー'}
       </span>
       {image.status === 'done' ? (
-        <img src={thumbnailUrl} alt={image.filename} className="w-16 h-16 object-contain mr-4 rounded" />
+        <img src={thumbnailUrl} alt={image.filename} className="w-16 h-16 object-contain mr-4 rounded bg-white" />
       ) : (
         <div className="w-16 h-16 mr-4" />
       )}
