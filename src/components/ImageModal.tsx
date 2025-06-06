@@ -31,8 +31,12 @@ export const ImageModal = ({ open, src, alt, onClose }: ImageModalProps) => {
         if (e.key === 'Enter' || e.key === ' ') onClose();
       }}
     >
-      <div onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
-        <img src={src} alt={alt} className="max-w-full max-h-full" />
+      <div
+        onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => e.stopPropagation()}
+        className="max-h-[90vh] max-w-[90vw]"
+      >
+        <img src={src} alt={alt} className="object-contain max-h-full max-w-full" />
       </div>
     </button>
   );
