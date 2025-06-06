@@ -18,6 +18,7 @@ export interface ConvertImageDone extends ConvertImageBase {
   status: 'done';
   result: File;
   compressedSize: number;
+  convertedFileType: string;
 }
 
 export interface ConvertImageError extends ConvertImageBase {
