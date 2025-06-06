@@ -8,7 +8,7 @@ export interface ResultBarProps {
 }
 
 export const ResultBar = ({ className }: ResultBarProps) => {
-  const { images, removeDoneImages } = useImages();
+  const { images, removeProcessedImages } = useImages();
 
   const convertedCount = useMemo(() => {
     return images.filter((image) => image.status === 'done').length;
@@ -34,9 +34,13 @@ export const ResultBar = ({ className }: ResultBarProps) => {
     URL.revokeObjectURL(url);
   }, [images]);
 
+  const clearableCount = useMemo(() => {
+    return images.filter((image) => image.status === 'done' || image.status === 'error').length;
+  }, [images]);
+
   const handleClear = useCallback(() => {
-    removeDoneImages();
-  }, [removeDoneImages]);
+    removeProcessedImages();
+  }, [removeProcessedImages]);
 
   return (
     <div
@@ -62,9 +66,9 @@ export const ResultBar = ({ className }: ResultBarProps) => {
           </button>
           <button
             type="button"
-            className="px-4 py-2 ml-4 bg-red-500 text-white rounded"
+            className="px-4 py-2 ml-4 bg-red-500 text-white rounded disabled:cursor-not-allowed disabled:opacity-30 disabled:bg-gray-400"
             onClick={handleClear}
-            disabled={convertedCount === 0}
+            disabled={clearableCount === 0}
           >
             すべて削除
           </button>

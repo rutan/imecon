@@ -59,8 +59,8 @@ export const useImages = () => {
     [setImages],
   );
 
-  const removeDoneImages = useCallback(() => {
-    setImages((images) => images.filter((i) => i.status !== 'done'));
+  const removeProcessedImages = useCallback(() => {
+    setImages((images) => images.filter((i) => i.status === 'converting'));
   }, [setImages]);
 
   return {
@@ -69,6 +69,6 @@ export const useImages = () => {
     addImage,
     updateImage,
     removeImage,
-    removeDoneImages,
+    removeProcessedImages,
   };
 };
