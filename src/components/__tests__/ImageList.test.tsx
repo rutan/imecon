@@ -68,7 +68,33 @@ describe('ImageList', () => {
     render(<Setup />, { wrapper });
     const img = await screen.findByAltText('foo.png');
     expect(img).toBeInTheDocument();
-    expect(img).toHaveClass('bg-white');
+    expect(img.parentElement).toHaveClass('bg-white');
+  });
+
+  it('opens modal when thumbnail clicked', async () => {
+    const image: ConvertImageDone = {
+      id: '1',
+      status: 'done',
+      filename: 'foo.png',
+      outputFilename: 'foo.png',
+      originalSize: 8,
+      compressedSize: 4,
+      result: new File(['data'], 'foo.png', { type: 'image/png' }),
+      convertedFileType: 'image/png',
+    };
+
+    const Setup: React.FC = () => {
+      const { addImage } = useImages();
+      useEffect(() => {
+        addImage(image);
+      }, [addImage]);
+      return <ImageList />;
+    };
+
+    render(<Setup />, { wrapper });
+    const img = await screen.findByAltText('foo.png');
+    fireEvent.click(img);
+    expect(await screen.findByTestId('image-modal')).toBeInTheDocument();
   });
 
   it('displays converted file type', async () => {
